@@ -3,3 +3,4 @@ streamlit==1.28.0
 requests==2.31.0
 pandas==2.0.3
 plotly==5.17.0
+pyarrow==14.0.1
