@@ -6,8 +6,10 @@ from datetime import datetime
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))  # Add parent folder to path
-from config import Config
 
+
+import os
+api_key = os.getenv("NYT_API_KEY")
 
 
 def processing_articles(article):
@@ -42,9 +44,6 @@ def processing_articles(article):
 
     return result
         
-
-
-api_key = Config.NYT_API_KEY
 
 end_year = datetime.now().year
 end_month = datetime.now().month 
