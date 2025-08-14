@@ -6,14 +6,14 @@ from datetime import datetime
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))  # Add parent folder to path
-from config import Config
 
 
+import os
+api_key = os.getenv("NYT_API_KEY")
 
-api_key = Config.NYT_API_KEY
 last_days = 30
 
-url = f"https://api.nytimes.com/svc/mostpopular/v2/viewed/{30}.json?api-key={api_key}"
+url = f"https://api.nytimes.com/svc/mostpopular/v2/viewed/{last_days}.json?api-key={api_key}"
 
 response = requests.get(url)
 
