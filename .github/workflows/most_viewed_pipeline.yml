@@ -6,6 +6,9 @@ on:
     - cron: "0 0 * * 1"
   workflow_dispatch:  # allow manual runs
 
+permissions:
+  contents: write  
+
 jobs:
   run-most-viewed:
     runs-on: ubuntu-latest
