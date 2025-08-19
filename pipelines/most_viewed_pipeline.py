@@ -17,7 +17,7 @@ url = f"https://api.nytimes.com/svc/mostpopular/v2/viewed/{last_days}.json?api-k
 
 response = requests.get(url)
 
-# Safely check status
+# Safely check statusa
 if response.status_code == 200:
     Data = response.json()
     print(f"Success: {Data['num_results']} results")
