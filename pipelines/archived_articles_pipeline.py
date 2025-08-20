@@ -17,12 +17,8 @@ def processing_articles(article):
     result["id"] = article["_id"].split("/")[-1]
     result["web_url"] = article["web_url"]
     result["abstract"] = article["abstract"]
-    result["snippet"] = article["snippet"]
     result["lead_paragraph"] = article["lead_paragraph"]
-    if article.get("multimedia" , 0) == 0 or article["multimedia"] == []:
-        result["image"] = None
-    else:    
-        result["image"] = "nyt.com/" + article["multimedia"][0]["url"]
+    
     result["headline"] = article["headline"]["main"]
     
     result["keyword_one"] = None
@@ -58,7 +54,7 @@ else:
 print(end_year, end_month)            
 
 
-output_path = f"{Path(__file__).parent.parent}/datasets/archived_articles_filtered_pq.parquet"
+output_path = f"{Path(__file__).parent.parent}/datasets/df_2024_2026.parquet"
 
 nyt_articles = []
 
@@ -67,6 +63,7 @@ if datetime.now().day == 1:
     
     try:
         response = requests.get(url, timeout =60)
+
         if response.status_code == 429:
             print("Rate limit hit. Sleeping for 60 seconds...")
             time.sleep(60)
@@ -79,8 +76,8 @@ if datetime.now().day == 1:
         for article in Data['response']['docs']:
             nyt_articles.append(processing_articles(article))
             
-        print(f"✅ Fetched {end_year}-{end_month:02d}. Sleeping for 15 seconds.")
-        time.sleep(15) 
+        print(f"✅ Fetched {end_year}-{end_month:02d}. Sleeping for 5 seconds.")
+        time.sleep(5) 
 
         df = pd.concat( [pd.read_parquet(output_path) , pd.DataFrame(nyt_articles)], ignore_index=True)
 

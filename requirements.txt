@@ -1,6 +1,7 @@
 python-dotenv==1.0.0
-streamlit==1.28.0
 requests==2.31.0
 pandas==2.0.3
 plotly==5.17.0
 pyarrow==14.0.1
+dash==2.17.1
+dash-bootstrap-components==1.6.0   
