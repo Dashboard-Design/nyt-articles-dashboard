@@ -91,7 +91,7 @@ if datetime.now().day == 1:
         print(f"❌ Request failed: {e}")
         time.sleep(30)
              
-    output_path = f"{Path(__file__).parent.parent}/datasets/archived_articles_filtered_pq.parquet" 
+    output_path = f"{Path(__file__).parent.parent}/datasets/df_2024_2026.parquet" 
     
     archived_data = pd.read_parquet(output_path)
     new_data = pd.DataFrame(nyt_articles) 
