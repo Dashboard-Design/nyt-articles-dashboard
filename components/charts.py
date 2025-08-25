@@ -24,7 +24,7 @@ def create_trend_chart_section():
         xaxis_title="Year",
         yaxis_title="Number of Articles",
         template="plotly_white",
-        height=450
+        height=480
     )
     
     return dbc.Container([
@@ -38,7 +38,7 @@ def create_trend_chart_section():
                             id="trend-chart",
                             figure=initial_fig,
                             config={'displayModeBar': False},
-                            style={'height': '450px'}
+                            style={'height': '480px'}
                         )
                     ], className="p-1")
                 ], className="shadow-sm h-100")

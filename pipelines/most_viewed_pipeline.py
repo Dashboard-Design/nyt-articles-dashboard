@@ -44,7 +44,10 @@ def processing_most_viewd_articles(article):
     result["published_date"] = article["published_date"]
     result["section_name"] = article["section"]
     result["subsection"] = article["subsection"]
-    result["image"] = article["media"][0]["media-metadata"][2]["url"]
+    if article["media"] == []:
+        result["image"] = None
+    else:    
+        result["image"] = article["media"][0]["media-metadata"][1]["url"]
 
     return result
 
