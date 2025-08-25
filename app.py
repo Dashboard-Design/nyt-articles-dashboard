@@ -14,8 +14,6 @@ from components.charts import create_trend_chart_section
 
 # Load data once (cached)
 df, df_most_viewed_l30 = load_data()
-print("DataFrame columns:", df.columns.tolist())  # Debug line
-print("DataFrame shape:", df.shape)  # Debug line
 
 # Initialize app with Bootstrap theme
 app = dash.Dash(__name__, external_stylesheets=[
@@ -51,7 +49,7 @@ def update_trend_analysis(n_clicks, keyword):
             xaxis_title="Year",
             yaxis_title="Number of Articles",
             template="plotly_white",
-            height=450
+            height=480
         )
         return fig, "--", "--", "--", "--"
         
@@ -68,7 +66,7 @@ def update_trend_analysis(n_clicks, keyword):
             xaxis_title="Year",
             yaxis_title="Number of Articles",
             template="plotly_white",
-            height=450
+            height=480
         )
         return fig, "0", "No Results", "No Data", "0"
     
@@ -101,7 +99,7 @@ def update_trend_analysis(n_clicks, keyword):
         template="plotly_white",
         hovermode='x unified',
         title_x=0.5,
-        height=450,
+        height=480,
         title=f"Articles containing '{keyword}' over time"
     )
     
