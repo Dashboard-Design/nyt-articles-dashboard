@@ -47,8 +47,6 @@ def load_data():
         existing_search_cols = [col for col in search_columns if col in df.columns]
         df = df.drop(columns=existing_search_cols)
         
-        print(f"Created search_text column from: {existing_search_cols}")
-        print(f"Dropped columns: {existing_search_cols}")
         
     # Load CSV (cached because function is memoized)
     df_most_viewed_l30 = pd.read_csv(DATASET_DIR / "nyt_most_viewed_last30d.csv")
