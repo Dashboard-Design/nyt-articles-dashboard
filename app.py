@@ -23,19 +23,29 @@ app = dash.Dash(__name__, external_stylesheets=[
 
 # App Layout
 app.layout = html.Div( 
-    style={'backgroundColor': '#F9FAFB', 'minHeight': '100vh', 'padding': '0'},
+    style={'backgroundColor': '#F7FAFC', 'minHeight': '100vh'},
     children = [
-        create_navbar(), 
-        create_search_section(),
-        create_trend_chart_section()
+        create_navbar(),
+        html.Div([
+            html.Div(
+            [
+                html.Div(style={'height': '40px'}),
+                create_search_section(),
+                html.Div(style={'height': '40px'}),
+                create_trend_chart_section()
+            ]
+            )
+        ] ,
+        style= {"maxWidth": "1300px", "margin": "0 auto"})
     ]
 )
+
 
 @app.callback(
     [Output('trend-chart', 'figure'),
      Output('total-articles-card', 'children'),
-     Output('peak-year-card', 'children'),
-     Output('recent-trend-card', 'children'),
+     Output('last-two-years-card', 'children'),
+     Output('growth-card', 'children'),
      Output('avg-monthly-card', 'children')],
     [Input('search-button', 'n_clicks')],
     [Input('keyword-input', 'value')]
@@ -49,7 +59,7 @@ def update_trend_analysis(n_clicks, keyword):
             xaxis_title="Year",
             yaxis_title="Number of Articles",
             template="plotly_white",
-            height=480
+            height=500
         )
         return fig, "--", "--", "--", "--"
         
@@ -66,7 +76,7 @@ def update_trend_analysis(n_clicks, keyword):
             xaxis_title="Year",
             yaxis_title="Number of Articles",
             template="plotly_white",
-            height=480
+            height=500
         )
         return fig, "0", "No Results", "No Data", "0"
     
@@ -99,7 +109,7 @@ def update_trend_analysis(n_clicks, keyword):
         template="plotly_white",
         hovermode='x unified',
         title_x=0.5,
-        height=480,
+        height=500,
         title=f"Articles containing '{keyword}' over time"
     )
     
