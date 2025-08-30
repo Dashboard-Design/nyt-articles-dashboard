@@ -11,6 +11,7 @@ from components.navbar import create_navbar
 from components.search_section import create_search_section
 from components.data_load import load_data
 from components.charts import create_trend_chart_section
+from components.most_viewed_carousel import create_most_viewed_carousel
 
 # Load data once (cached)
 df, df_most_viewed_l30 = load_data()
@@ -21,6 +22,7 @@ app = dash.Dash(__name__, external_stylesheets=[
     "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
 ])
 
+
 # App Layout
 app.layout = html.Div( 
     style={'backgroundColor': '#F7FAFC', 'minHeight': '100vh'},
@@ -29,10 +31,13 @@ app.layout = html.Div(
         html.Div([
             html.Div(
             [
-                html.Div(style={'height': '40px'}),
+                html.Div(style={'height': '50px'}),
                 create_search_section(),
-                html.Div(style={'height': '40px'}),
-                create_trend_chart_section()
+                html.Div(style={'height': '30px'}),
+                create_trend_chart_section(),
+                html.Div(style={'height': '30px'}),
+                create_most_viewed_carousel(df_most_viewed_l30),
+                html.Div(style={'height': '30px'})
             ]
             )
         ] ,
@@ -101,7 +106,7 @@ def update_trend_analysis(n_clicks, keyword):
     )
     
     fig.update_traces(
-        line=dict(color='#1f77b4', width=3),
+        line=dict(color='#155DFC', width=3),
         marker=dict(size=6)
     )
     
