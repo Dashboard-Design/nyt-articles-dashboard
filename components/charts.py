@@ -4,7 +4,6 @@ import plotly.graph_objects as go
 from dash import html
 
 def create_metric_card(title, value, value_id, subtitle, icon, color="#3182CE"):
-    """Create a metric card component matching the Figma design"""
     return dbc.Card(
         dbc.CardBody([
             html.Div([
@@ -28,7 +27,6 @@ def create_metric_card(title, value, value_id, subtitle, icon, color="#3182CE"):
     )
 
 def create_trend_chart_section():
-    """Create the main chart section with cards"""
     # Create initial empty figure
     initial_fig = go.Figure()
     initial_fig.update_layout(
@@ -62,8 +60,8 @@ def create_trend_chart_section():
             dbc.Col([
                 dbc.Card([
                     dbc.CardBody([
-                        html.H5("Article Publication Trends", className="mb-1 mt-2", style={'fontWeight': '600', 'color': '#2D3748'}),
-                        html.P("Article publication frequency from 2015 to 2025", className="mb-2", style={'color': '#718096'}),
+                        html.H5("Article Publication Trends", className="mb-1 mt-3 ms-2", style={'fontWeight': '600', 'color': '#2D3748'}),
+                        html.P("Article publication frequency from 2015 to 2025", className="mb-2 ms-2", style={'color': '#718096'}),
                         dcc.Graph(
                             id="trend-chart",
                             figure=initial_fig,
@@ -84,7 +82,7 @@ def create_trend_chart_section():
                         "total-articles-card",
                         "all articles",
                         "fas fa-newspaper"
-                    ), width=12, className="h-100 mb-3"),
+                    ), width=12, className="h-100 mb-3 ms-3"),
                     
                     dbc.Col(create_metric_card(
                         "Last Two Years", 
@@ -92,7 +90,7 @@ def create_trend_chart_section():
                         "last-two-years-card",
                         "2023-2024",
                         "fas fa-chart-bar"
-                    ), width=12, className="h-100 mb-3"),
+                    ), width=12, className="h-100 mb-3 ms-3"),
                     
                     dbc.Col(create_metric_card(
                         "Growth vs Previous 2Y", 
@@ -100,7 +98,7 @@ def create_trend_chart_section():
                         "growth-card",
                         "vs 2021-2022",
                         "fas fa-chart-line"
-                    ), width=12, className="h-100 mb-3"),
+                    ), width=12, className="h-100 mb-3 ms-3"),
                     
                     dbc.Col(create_metric_card(
                         "Avg/Month", 
@@ -108,14 +106,12 @@ def create_trend_chart_section():
                         "avg-monthly-card",
                         "across all years",
                         "fas fa-calendar-alt"
-                    ), width=12)
-                ], className="g-3") 
+                    ), width=12, className="h-100 ms-3")
+                ],  className="g-3") 
             ], width=3
             )
         ],
-            className="g-5"
+            className="g-3"
         )
-    ], fluid=True
-    )
-
-# fluid=True, className="p-5 bg-white shadow-sm", style={'borderRadius': '12px', 'maxWidth': '1500px'})
+    ], fluid=True    
+)
