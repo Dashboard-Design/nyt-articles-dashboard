@@ -35,9 +35,9 @@ app.layout = html.Div(
                 create_search_section(),
                 html.Div(style={'height': '30px'}),
                 create_trend_chart_section(),
-                html.Div(style={'height': '30px'}),
+                html.Div(style={'height': '50px'}),
                 create_most_viewed_carousel(df_most_viewed_l30),
-                html.Div(style={'height': '30px'})
+                html.Div(style={'height': '50px'})
             ]
             )
         ] ,
