@@ -77,11 +77,12 @@ if datetime.now().day == 1:
             nyt_articles.append(processing_articles(article))
             
         print(f"✅ Fetched {end_year}-{end_month:02d}. Sleeping for 5 seconds.")
-        time.sleep(5) 
+        
 
         df = pd.concat( [pd.read_parquet(output_path) , pd.DataFrame(nyt_articles)], ignore_index=True)
 
-        df.to_parquet(output_path, index=False)
+        df['published_date'] = pd.to_datetime(df['published_date'], errors='coerce')
+
 
     except requests.exceptions.SSLError as e:
         print(f"🔒 SSL Error on {end_year}-{end_month:02d}. Retrying after 30 seconds.")
@@ -90,13 +91,8 @@ if datetime.now().day == 1:
     except requests.exceptions.RequestException as e:
         print(f"❌ Request failed: {e}")
         time.sleep(30)
-             
-    output_path = f"{Path(__file__).parent.parent}/datasets/df_2024_2026.parquet" 
     
-    archived_data = pd.read_parquet(output_path)
-    new_data = pd.DataFrame(nyt_articles) 
-    
-    pd.concat([archived_data, new_data]).to_parquet(output_path, index=False)
+    df.to_parquet(output_path, index=False)
 
     nyt_articles.clear()   
 
