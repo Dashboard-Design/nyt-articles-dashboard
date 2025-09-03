@@ -158,4 +158,4 @@ def create_most_viewed_carousel(df_most_viewed_l30):
         )  
     ],
     className="mt-3 mb-5"
-    )
+)
