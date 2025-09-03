@@ -12,9 +12,9 @@ from components.search_section import create_search_section
 from components.data_load import load_data
 from components.charts import create_trend_chart_section
 from components.most_viewed_carousel import create_most_viewed_carousel
+from components.line_chart import line_chart_generator
 
-# Load data once (cached)
-df, df_most_viewed_l30 = load_data()
+df, df_most_viewed_l30, monthly_trends_all = load_data()
 
 # Initialize app with Bootstrap theme
 app = dash.Dash(__name__, external_stylesheets=[
@@ -35,7 +35,7 @@ app.layout = html.Div(
                 create_search_section(),
                 html.Div(style={'height': '30px'}),
                 create_trend_chart_section(),
-                html.Div(style={'height': '50px'}),
+                html.Div(style={'height': '40px'}),
                 create_most_viewed_carousel(df_most_viewed_l30),
                 html.Div(style={'height': '50px'})
             ]
@@ -47,7 +47,9 @@ app.layout = html.Div(
 
 
 @app.callback(
-    [Output('trend-chart', 'figure'),
+    [
+     Output('trend-title', 'children'),
+     Output('trend-chart', 'figure'),
      Output('total-articles-card', 'children'),
      Output('last-two-years-card', 'children'),
      Output('growth-card', 'children'),
@@ -56,21 +58,32 @@ app.layout = html.Div(
     [Input('keyword-input', 'value')]
 )
 def update_trend_analysis(n_clicks, keyword):
-    # Show placeholder chart if no search has been performed yet
+    # if no search has been performed yet
     if (not n_clicks) or (not keyword) or (keyword.strip() == ""):
-        fig = go.Figure()
-        fig.update_layout(
-            title="Enter a keyword and click 'Analyze' to see trends",
-            xaxis_title="Year",
-            yaxis_title="Number of Articles",
-            template="plotly_white",
-            height=500
-        )
-        return fig, "--", "--", "--", "--"
+        fig = line_chart_generator(monthly_trends_all)
+        
+        total_articles = len(df)
+        
+        # (2023 and 2024)
+        last_two_years = len(df[df['year'].isin([2023, 2024])])
+        
+        # (2021 and 2022)
+        previous_two_years = len(df[df['year'].isin([2021, 2022])])
+        
+        # Growth
+        growth_pct = round(((last_two_years - previous_two_years) / previous_two_years) * 100, 1)
+        growth_text = f"{growth_pct:+.1f}%"
+        
+        # Average
+        months_span = monthly_trends_all['year_month'].nunique()
+        avg_monthly = round(total_articles / months_span, 1)
+        
+        return "Article Publication Trends", fig, f"{total_articles:,}", f"{last_two_years:,}", growth_text, f"{avg_monthly:,.1f}"
+
         
     keyword_lower = keyword.lower().strip()
     
-    # Filter dataframe using simple contains search
+    # Filter dataframe using search
     mask = df['search_text'].fillna('').astype(str).str.lower().str.contains(keyword_lower, case=False, na=False, regex=False)
     filtered_df = df[mask].copy()
     
@@ -78,68 +91,33 @@ def update_trend_analysis(n_clicks, keyword):
         fig = go.Figure()
         fig.update_layout(
             title=f"No articles found containing '{keyword}'",
-            xaxis_title="Year",
-            yaxis_title="Number of Articles",
             template="plotly_white",
             height=500
         )
         return fig, "0", "No Results", "No Data", "0"
     
-    # Convert pub_date to datetime if it's not already
-
-    filtered_df['published_date'] = pd.to_datetime(filtered_df['published_date'], errors='coerce')
-    filtered_df = filtered_df.dropna(subset=['published_date'])
+    monthly_counts = filtered_df.groupby('year_month').size().reset_index(name='count')
+    monthly_counts['date'] = monthly_counts['year_month'].dt.to_timestamp()
     
-    # Extract year
-    filtered_df['year'] = filtered_df['published_date'].dt.year
+    fig = line_chart_generator(monthly_counts)
     
-    # Group by year and count articles
-    yearly_counts = filtered_df.groupby('year').size().reset_index(name='count')
-    
-    # Create line chart
-    fig = px.line(
-        yearly_counts, 
-        x='year', 
-        y='count',
-        title=f"Article Publication Trends for '{keyword}'",
-        labels={'count': 'Number of Articles', 'year': 'Year'}
-    )
-    
-    fig.update_traces(
-        line=dict(color='#155DFC', width=3),
-        marker=dict(size=6)
-    )
-    
-    fig.update_layout(
-        template="plotly_white",
-        hovermode='x unified',
-        title_x=0.5,
-        height=500,
-        title=f"Articles containing '{keyword}' over time"
-    )
-    
-    # Calculate card values
     total_articles = len(filtered_df)
-    peak_year = yearly_counts.loc[yearly_counts['count'].idxmax(), 'year'] if not yearly_counts.empty else "N/A"
     
-    # Recent trend (last 2 years vs previous 2 years)
-    current_year = datetime.now().year
-    recent_count = len(filtered_df[filtered_df['year'].isin([current_year-1, current_year-2])])
-    previous_count = len(filtered_df[filtered_df['year'].isin([current_year-3, current_year-4])])
+    # (2023 and 2024)
+    last_two_years = len(filtered_df[filtered_df['year'].isin([2023, 2024])])
     
-    if previous_count > 0:
-        trend_pct = round(((recent_count - previous_count) / previous_count) * 100, 1)
-        recent_trend = f"{trend_pct:+.1f}%"
-    else:
-        recent_trend = "N/A"
+    # (2021 and 2022)
+    previous_two_years = len(filtered_df[filtered_df['year'].isin([2021, 2022])])
     
-    # Average monthly (approximate)
-    years_span = yearly_counts['year'].max() - yearly_counts['year'].min() + 1 if not yearly_counts.empty else 1
-    avg_monthly = round(total_articles / (years_span * 12), 1)
+    # Growth 
+    growth_pct = round(((last_two_years - previous_two_years) / previous_two_years) * 100, 1)
+    growth_text = f"{growth_pct:+.1f}%"
     
-    return fig, f"{total_articles:,}", str(peak_year), recent_trend, f"{avg_monthly:.1f}"
+    # Average 
+    months_span = monthly_counts['year_month'].nunique()
+    avg_monthly = round(total_articles / months_span, 1)
     
-
-
+    return f"Article Publication Trends for '{keyword}'", fig, f"{total_articles:,}", f"{last_two_years:,}", growth_text, f"{avg_monthly:.1f}"
+    
 if __name__ == "__main__":
     app.run(debug=True)
