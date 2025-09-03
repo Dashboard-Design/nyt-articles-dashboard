@@ -3,7 +3,7 @@ from dash import html, dcc
 import plotly.graph_objects as go
 from dash import html
 
-def create_metric_card(title, value, value_id, subtitle, icon, color="#939AA5"):
+def create_metric_card(title, value, value_id, subtitle, icon, color="#6C7077"):
     return dbc.Card(
         dbc.CardBody([
             html.Div([

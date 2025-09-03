@@ -13,6 +13,8 @@ from components.data_load import load_data
 from components.charts import create_trend_chart_section
 from components.most_viewed_carousel import create_most_viewed_carousel
 from components.line_chart import line_chart_generator
+from components.footer import create_footer
+
 
 df, df_most_viewed_l30, monthly_trends_all = load_data()
 
@@ -24,27 +26,36 @@ app = dash.Dash(__name__, external_stylesheets=[
 
 
 # App Layout
-app.layout = html.Div( 
+app.layout = html.Div(
     style={'backgroundColor': '#F7FAFC', 'minHeight': '100vh'},
-    children = [
+    children=[
+        dcc.Location(id="url", refresh=False),  # 👈 track the URL hash
         create_navbar(),
+
         html.Div([
-            html.Div(
-            [
-                html.Div(style={'height': '50px'}),
-                create_search_section(),
+            html.Div([
+                html.Div(style={'height': '40px'}),
+
+                html.Div(id="analysis", children=[
+                    create_search_section()
+                ]),
+                
                 html.Div(style={'height': '30px'}),
                 create_trend_chart_section(),
+
                 html.Div(style={'height': '40px'}),
-                create_most_viewed_carousel(df_most_viewed_l30),
-                html.Div(style={'height': '50px'})
-            ]
-            )
-        ] ,
-        style= {"maxWidth": "1300px", "margin": "0 auto"})
+
+                html.Div(id="most-viewed-section", children=[
+                    create_most_viewed_carousel(df_most_viewed_l30)
+                ]),
+
+                html.Div(style={'height': '30px'})
+            ])
+        ], style={"maxWidth": "1300px", "margin": "0 auto"}),
+
+        html.Div(id="footer-section", children=[create_footer()])
     ]
 )
-
 
 @app.callback(
     [
@@ -72,7 +83,7 @@ def update_trend_analysis(n_clicks, keyword):
         
         # Growth
         growth_pct = round(((last_two_years - previous_two_years) / previous_two_years) * 100, 1)
-        growth_text = f"{growth_pct:+.1f}%"
+        growth_text = f"{'▲' if growth_pct > 0 else '▼'}{abs(growth_pct):.1f}%"
         
         # Average
         months_span = monthly_trends_all['year_month'].nunique()
