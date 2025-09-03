@@ -3,13 +3,13 @@ from dash import html, dcc
 import plotly.graph_objects as go
 from dash import html
 
-def create_metric_card(title, value, value_id, subtitle, icon, color="#3182CE"):
+def create_metric_card(title, value, value_id, subtitle, icon, color="#939AA5"):
     return dbc.Card(
         dbc.CardBody([
             html.Div([
                 # Icon
                 html.Div(
-                    html.I(className=f"{icon} me-2", style={'color': color, 'fontSize': '18px'}),
+                    html.I(className=f"{icon} me-3", style={'color': color, 'fontSize': '18px'}),
                     style={'display': 'inline-block', 'verticalAlign': 'middle'}
                 ),
                 # Value
@@ -29,43 +29,19 @@ def create_metric_card(title, value, value_id, subtitle, icon, color="#3182CE"):
 def create_trend_chart_section():
     # Create initial empty figure
     initial_fig = go.Figure()
-    initial_fig.update_layout(
-        title={
-            'text': "Article Publication Trends",
-            'x': 0.5,
-            'xanchor': 'center',
-            'font': {'size': 18, 'color': '#2D3748'}
-        },
-        xaxis_title="Year",
-        yaxis_title="Number of Articles",
-        # plot_bgcolor='white',
-        # paper_bgcolor='white',
-        font={'color': '#718096'},
-        height=500,
-        showlegend=False,
-        xaxis=dict(
-            showgrid=True,
-            gridwidth=1,
-            gridcolor='#E2E8F0'
-        ),
-        yaxis=dict(
-            showgrid=True,
-            gridwidth=1,
-            gridcolor='#E2E8F0'
-        )
-    )
-        
+
     return dbc.Container([
         dbc.Row( [
             dbc.Col([
                 dbc.Card([
                     dbc.CardBody([
-                        html.H5("Article Publication Trends", className="mb-1 mt-3 ms-2", style={'fontWeight': '600', 'color': '#2D3748'}),
+                        html.H5("Article Publication Trends", id="trend-title", className="mb-1 mt-3 ms-2", style={'fontWeight': '600', 'color': '#2D3748'}),
                         html.P("Article publication frequency from 2015 to 2025", className="mb-2 ms-2", style={'color': '#718096'}),
                         dcc.Graph(
                             id="trend-chart",
                             figure=initial_fig,
                             config={'displayModeBar': False},
+                            className="w-100",
                             style={'height': '500px'}
                         )
                     ] ,className="p-3"  )
@@ -80,7 +56,7 @@ def create_trend_chart_section():
                         "Total Articles", 
                         "--", 
                         "total-articles-card",
-                        "all articles",
+                        "all articles 2015-2025",
                         "fas fa-newspaper"
                     ), width=12, className="h-100 mb-3 ms-3"),
                     

@@ -14,9 +14,11 @@ def load_data():
     - Creates a combined search_text column
     - Drops the original columns used for search_text
     - Reads the CSV for 'most viewed last 30 days'
+    - Precomputes monthly trends for the entire dataset
     Returns:
         df (pd.DataFrame): Combined article data with search_text column
         df_most_viewed_l30 (pd.DataFrame): Last 30 days most viewed data
+        monthly_trends (pd.DataFrame): Precomputed monthly article counts
     """
     # Collect all parquet files
     parquet_files = glob.glob(str(DATASET_DIR / "*.parquet"))
@@ -46,9 +48,26 @@ def load_data():
         # Drop the original columns that were used to create search_text
         existing_search_cols = [col for col in search_columns if col in df.columns]
         df = df.drop(columns=existing_search_cols)
+    
+    
+    # Ensure published_date is datetime
+    df['published_date'] = pd.to_datetime(df['published_date'], errors='coerce')
+    df = df.dropna(subset=['published_date'])
+    
+    # Extract year and month for efficient grouping
+    df['year'] = df['published_date'].dt.year
+    df['month'] = df['published_date'].dt.month
+    df['year_month'] = df['published_date'].dt.to_period('M') 
+
+
+    # Precompute monthly trends for the entire dataset
+    monthly_trends = df.groupby('year_month').size().reset_index(name='count')
+    monthly_trends['year'] = monthly_trends['year_month'].dt.year
+    monthly_trends['month'] = monthly_trends['year_month'].dt.month
+    monthly_trends['date'] = monthly_trends['year_month'].dt.to_timestamp()   
         
         
     # Load CSV (cached because function is memoized)
     df_most_viewed_l30 = pd.read_csv(DATASET_DIR / "nyt_most_viewed_last30d.csv")
 
-    return df, df_most_viewed_l30
+    return df, df_most_viewed_l30, monthly_trends

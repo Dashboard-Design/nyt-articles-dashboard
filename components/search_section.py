@@ -27,7 +27,7 @@ def create_search_section():
                         id="search-button",
                         color="primary", 
                         className="w-100 py-2",
-                        style={'backgroundColor': '#3182CE', 'borderRadius': '8px', 'fontWeight': '600'}
+                        style={'backgroundColor': "#155EFCC0", 'borderRadius': '8px', 'fontWeight': '600'}
                     ),
                     width=2,
                 ),
