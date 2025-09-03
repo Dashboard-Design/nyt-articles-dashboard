@@ -12,7 +12,7 @@ def create_navbar():
             className="g-0",
             ),
             dbc.Nav([
-                dbc.NavItem(dbc.NavLink("Live Dashboard", href="#", style={
+                dbc.NavItem(dbc.NavLink("Updates", href="#", style={
                     'backgroundColor': '#3182CE', 
                     'color': 'white', 
                     'borderRadius': '6px',
