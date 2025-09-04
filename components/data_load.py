@@ -1,17 +1,10 @@
+import glob
 import pandas as pd
+from pathlib import Path
 from functools import lru_cache
 
 # Dataset directory
-DATASET_DIR = "https://raw.githubusercontent.com/Dashboard-Design/nyt-articles-dashboard/main/datasets/"
-
-# List of parquet files hosted on GitHub
-PARQUET_FILES = [
-    "df_2015_2016.parquet",
-    "df_2016_2018.parquet",
-    "df_2018_2021.parquet",
-    "df_2021_2024.parquet",
-    "df_2024_2026.parquet"
-]
+DATASET_DIR = Path(__file__).parent.parent / "datasets"
 
 @lru_cache(maxsize=1)  # cache the result of the function
 def load_data():
@@ -28,8 +21,11 @@ def load_data():
         monthly_trends (pd.DataFrame): Precomputed monthly article counts
     """
     # Collect all parquet files
+    parquet_files = glob.glob(str(DATASET_DIR / "*.parquet"))
+
+    # Efficient concatenation with ignore_index=True
     df = pd.concat(
-        [pd.read_parquet(DATASET_DIR + file, engine="pyarrow") for file in PARQUET_FILES],
+        [pd.read_parquet(file, engine="pyarrow") for file in parquet_files],
         ignore_index=True
     )
     
@@ -64,6 +60,6 @@ def load_data():
         
         
     # Load CSV (cached because function is memoized)
-    df_most_viewed_l30 = pd.read_csv(DATASET_DIR + "nyt_most_viewed_last30d.csv")
+    df_most_viewed_l30 = pd.read_csv(DATASET_DIR / "nyt_most_viewed_last30d.csv")
 
     return df, df_most_viewed_l30, monthly_trends
