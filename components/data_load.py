@@ -32,23 +32,15 @@ def load_data():
     # Columns to combine for search
     search_columns = ['keyword_one', 'keyword_two', 'keyword_three', 'keyword_four', 'headline', 'abstract']
     
-    # Create search_text column by combining specified columns
-    # Handle NaN values by converting to empty strings
-    search_parts = []
-    for col in search_columns:
-        search_parts.append(df[col].fillna('').astype(str))
+    # Combine all parts with space separator for each row
+    df['search_text'] = df[search_columns].fillna('').astype(str).apply(lambda x: ' '.join(x), axis=1)
     
-    if search_parts:
-        # Combine all parts with space separator for each row
-        df['search_text'] = df[search_columns].fillna('').astype(str).apply(lambda x: ' '.join(x), axis=1)
-        
-        # Clean up extra spaces
-        df['search_text'] = df['search_text'].str.replace(r'\s+', ' ', regex=True).str.strip()
-        
-        # Drop the original columns that were used to create search_text
-        existing_search_cols = [col for col in search_columns if col in df.columns]
-        df = df.drop(columns=existing_search_cols)
+    # Clean up extra spaces
+    df['search_text'] = df['search_text'].str.replace(r'\s+', ' ', regex=True).str.strip().str.lower()
     
+    # Drop the original columns that were used to create search_text
+    df = df.drop(columns=search_columns)
+
     
     # Ensure published_date is datetime
     df['published_date'] = pd.to_datetime(df['published_date'], errors='coerce')

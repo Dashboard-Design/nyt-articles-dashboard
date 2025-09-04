@@ -92,20 +92,30 @@ def update_trend_analysis(n_clicks, keyword):
         return "Article Publication Trends", fig, f"{total_articles:,}", f"{last_two_years:,}", growth_text, f"{avg_monthly:,.1f}"
 
         
-    keyword_lower = keyword.lower().strip()
+    query = keyword.strip().lower()
+
+    # Case 1: Exact phrase search (user used quotes)
+    if query.startswith('"') and query.endswith('"'):
+        phrase = query.strip('"')  
+        mask = df['search_text'].str.contains(phrase, na=False)
+        query = query.replace('"', '')
+        query = f"Article Publication Trends for exact term '{query}'"
+    # Case 2: Multi-word AND search    
+    else:
+        words = query.split()
+        mask = df['search_text'].apply(  lambda text: all(word in text for word in words) )
+        query = query.replace('"', '')
+        query = f"Article Publication Trends for '{query}'"
     
-    # Filter dataframe using search
-    mask = df['search_text'].fillna('').astype(str).str.lower().str.contains(keyword_lower, case=False, na=False, regex=False)
     filtered_df = df[mask].copy()
     
     if len(filtered_df) == 0:
         fig = go.Figure()
         fig.update_layout(
-            title=f"No articles found containing '{keyword}'",
             template="plotly_white",
             height=500
         )
-        return fig, "0", "No Results", "No Data", "0"
+        return query, fig, "0", "No Results", "No Data", "0"
     
     monthly_counts = filtered_df.groupby('year_month').size().reset_index(name='count')
     monthly_counts['date'] = monthly_counts['year_month'].dt.to_timestamp()
@@ -128,7 +138,7 @@ def update_trend_analysis(n_clicks, keyword):
     months_span = monthly_counts['year_month'].nunique()
     avg_monthly = round(total_articles / months_span, 1)
     
-    return f"Article Publication Trends for '{keyword}'", fig, f"{total_articles:,}", f"{last_two_years:,}", growth_text, f"{avg_monthly:.1f}"
+    return query, fig, f"{total_articles:,}", f"{last_two_years:,}", growth_text, f"{avg_monthly:.1f}"
     
 if __name__ == "__main__":
     app.run(debug=True)
