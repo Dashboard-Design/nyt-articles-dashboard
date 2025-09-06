@@ -46,3 +46,11 @@ The project also includes **automated data pipelines** powered by GitHub Actions
 - [GitHub Actions](https://docs.github.com/en/actions) (CI/CD workflows)  
 
 ---
+
+## ⚡ Getting Started  
+
+Clone the repository:  
+```bash
+git clone https://github.com/Dashboard-Design/nyt-articles-dashboard.git
+cd nyt-articles-dashboard
+```
