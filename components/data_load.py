@@ -5,6 +5,7 @@ from functools import lru_cache
 
 # Dataset directory
 DATASET_DIR = Path(__file__).parent.parent / "light dataset"
+DATASET_DIR2 = Path(__file__).parent.parent / "datasets"
 
 @lru_cache(maxsize=1)  # cache the result of the function
 def load_data():
@@ -33,6 +34,7 @@ def load_data():
     df['published_date'] = pd.to_datetime(df['published_date'], errors='coerce')
     
     # Extract year and month for efficient grouping
+    df['year'] = df['published_date'].dt.year
     df['year_month'] = df['published_date'].dt.to_period('M') 
 
 
@@ -44,6 +46,6 @@ def load_data():
         
         
     # Load CSV (cached because function is memoized)
-    df_most_viewed_l30 = pd.read_csv(DATASET_DIR / "nyt_most_viewed_last30d.csv")
+    df_most_viewed_l30 = pd.read_csv(DATASET_DIR2 / "nyt_most_viewed_last30d.csv")
 
     return df, df_most_viewed_l30, monthly_trends
