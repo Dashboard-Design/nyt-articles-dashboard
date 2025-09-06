@@ -54,3 +54,20 @@ Clone the repository:
 git clone https://github.com/Dashboard-Design/nyt-articles-dashboard.git
 cd nyt-articles-dashboard
 ```
+
+Create a virtual environment (using uv or venv):
+```bash
+uv venv
+source .venv/bin/activate   # Mac/Linux
+.venv\Scripts\activate      # Windows
+```
+
+Install dependencies:
+```bash
+uv pip install -r requirements.txt
+```
+
+Run the app:
+```bash
+uv run app.py
+```
