@@ -6,6 +6,7 @@ from functools import lru_cache
 # Dataset directory
 DATASET_DIR = Path(__file__).parent.parent / "light dataset"
 DATASET_DIR2 = Path(__file__).parent.parent / "datasets"
+# DATASET_DIR = "https://raw.githubusercontent.com/Dashboard-Design/nyt-articles-dashboard/main/datasets/"
 
 @lru_cache(maxsize=1)  # cache the result of the function
 def load_data():
@@ -49,3 +50,5 @@ def load_data():
     df_most_viewed_l30 = pd.read_csv(DATASET_DIR2 / "nyt_most_viewed_last30d.csv")
 
     return df, df_most_viewed_l30, monthly_trends
+
+

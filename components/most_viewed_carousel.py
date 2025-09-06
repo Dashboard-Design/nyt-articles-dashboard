@@ -33,7 +33,6 @@ def create_most_viewed_carousel(df_most_viewed_l30):
         controls=True,
         indicators=True,
         interval=5000,  # mili seconds
-        ride="carousel",
         className="carousel-fade",
         # Style the carousel container
         style={
