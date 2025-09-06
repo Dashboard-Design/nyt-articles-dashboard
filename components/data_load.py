@@ -4,7 +4,8 @@ from pathlib import Path
 from functools import lru_cache
 
 # Dataset directory
-DATASET_DIR = Path(__file__).parent.parent / "datasets"
+DATASET_DIR = Path(__file__).parent.parent / "light dataset"
+DATASET_DIR2 = Path(__file__).parent.parent / "datasets"
 
 @lru_cache(maxsize=1)  # cache the result of the function
 def load_data():
@@ -28,27 +29,12 @@ def load_data():
         [pd.read_parquet(file, engine="pyarrow") for file in parquet_files],
         ignore_index=True
     )
-    
-    # Columns to combine for search
-    search_columns = ['keyword_one', 'keyword_two', 'keyword_three', 'keyword_four', 'headline', 'abstract']
-    
-    # Combine all parts with space separator for each row
-    df['search_text'] = df[search_columns].fillna('').astype(str).apply(lambda x: ' '.join(x), axis=1)
-    
-    # Clean up extra spaces
-    df['search_text'] = df['search_text'].str.replace(r'\s+', ' ', regex=True).str.strip().str.lower()
-    
-    # Drop the original columns that were used to create search_text
-    df = df.drop(columns=search_columns)
 
-    
     # Ensure published_date is datetime
     df['published_date'] = pd.to_datetime(df['published_date'], errors='coerce')
-    df = df.dropna(subset=['published_date'])
     
     # Extract year and month for efficient grouping
     df['year'] = df['published_date'].dt.year
-    df['month'] = df['published_date'].dt.month
     df['year_month'] = df['published_date'].dt.to_period('M') 
 
 
@@ -60,6 +46,6 @@ def load_data():
         
         
     # Load CSV (cached because function is memoized)
-    df_most_viewed_l30 = pd.read_csv(DATASET_DIR / "nyt_most_viewed_last30d.csv")
+    df_most_viewed_l30 = pd.read_csv(DATASET_DIR2 / "nyt_most_viewed_last30d.csv")
 
     return df, df_most_viewed_l30, monthly_trends
