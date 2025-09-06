@@ -71,3 +71,23 @@ Run the app:
 ```bash
 uv run app.py
 ```
+The app will be available at:
+👉 http://127.0.0.1:8050
+
+---
+
+- ## 🔄 Automated Workflows
+  - Weekly Workflow: Fetches NYT’s most-viewed articles (last 30 days).
+  - Monthly Workflow: Downloads and appends the latest archive.
+ 
+---
+
+- ## 👨‍💻 About
+
+This project was developed by Sajjad Ahmadi
+as part of my exploration into data visualization, automation, and web dashboards.
+
+I started this project to:
+  - Learn how to build production-ready data pipelines with GitHub Actions.
+  - Explore large-scale text datasets and how to search/filter them efficiently.
+  - Develop a clean, scalable Dash app that can evolve with new features.
