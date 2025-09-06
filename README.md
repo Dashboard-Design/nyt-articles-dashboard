@@ -76,13 +76,13 @@ The app will be available at:
 
 ---
 
-- ## 🔄 Automated Workflows
+## 🔄 Automated Workflows
   - Weekly Workflow: Fetches NYT’s most-viewed articles (last 30 days).
   - Monthly Workflow: Downloads and appends the latest archive.
  
 ---
 
-- ## 👨‍💻 About
+## 👨‍💻 About
 
 This project was developed by Sajjad Ahmadi
 as part of my exploration into data visualization, automation, and web dashboards.
