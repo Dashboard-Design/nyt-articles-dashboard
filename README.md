@@ -3,7 +3,11 @@
 An interactive **Dash web application** that analyzes New York Times articles with powerful search, trend visualizations, and insights.  
 The project also includes **automated data pipelines** powered by GitHub Actions to keep datasets fresh and up-to-date.  
 
-![Dashboard Screenshot](assets/dashboard_preview.png) <!-- Replace with actual screenshot -->
+<img width="1909" height="947" alt="Image" src="https://github.com/user-attachments/assets/e5b33761-68d1-4fa3-bdc3-3e84414bebe3" />
+
+<img width="1909" height="947" alt="Image" src="https://github.com/user-attachments/assets/9455cab1-9100-4b36-96bf-da1a66227e12" />
+
+
 
 ---
 
