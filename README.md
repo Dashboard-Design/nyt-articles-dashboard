@@ -82,10 +82,7 @@ The app will be available at:
  
 ---
 
-## 👨‍💻 About
-
-This project was developed by Sajjad Ahmadi
-as part of my exploration into data visualization, automation, and web dashboards.
+## 👨‍💻 Goal
 
 I started this project to:
   - Learn how to build production-ready data pipelines with GitHub Actions.
