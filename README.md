@@ -1,19 +1,44 @@
-# New York Times Article Analytics Dashboard
+# 📰 NYTimes Analytics Dashboard  
 
+An interactive **Dash web application** that analyzes New York Times articles with powerful search, trend visualizations, and insights.  
+The project also includes **automated data pipelines** powered by GitHub Actions to keep datasets fresh and up-to-date.  
 
-🚀 Features
+![Dashboard Screenshot](assets/dashboard_preview.png) <!-- Replace with actual screenshot -->
 
-Interactive Dashboard: Explore 15 years of NYT article data with dynamic visualizations
-Trend Analysis: Track topic evolution and news patterns over time
-Article Search: Find and filter articles by keywords, date ranges, and categories
-Monthly Updates: Automated data pipeline to fetch the latest articles
-Responsive Design: Works on desktop and mobile devices
+---
 
-📊 Dashboard Components
+## 🚀 Features  
 
-Timeline View: Article publication trends over time
-Topic Analysis: Most popular subjects and their evolution
-Search Functionality: Full-text search across all articles
-Category Breakdown: Distribution across news sections
-Word Clouds: Visual representation of trending terms
-Export Options: Download filtered datasets
+- **📊 Interactive Dash App**  
+  - Search across articles using multi-word queries.  
+  - Explore publication trends over time.  
+  - Browse a carousel of the most-viewed articles from the past 30 days.  
+  - Responsive layout built with **Dash + Bootstrap**.  
+
+- **⚙️ Automated Data Pipelines**  
+  - Two **GitHub Actions workflows**:  
+    - Weekly updates to fetch the latest datasets.  
+    - Monthly updates to fetch and append new archives.  
+  - Pipelines store cleaned data in both **Parquet** and **CSV** formats.  
+
+- **📂 Clean Project Structure**  
+  - `app.py`: Main Dash application.  
+  - `components/`: Modularized UI and logic (charts, navbar, search section, etc.).  
+  - `datasets/`: Processed NYT datasets.  
+  - `.github/workflows/`: GitHub Actions configs for automated pipelines.  
+
+- **🔍 Search Mechanism**  
+  - Built a **search_text** index combining headline, abstract, and keywords.  
+  - Supports multi-word queries like `"black box"` to return relevant matches.  
+
+---
+
+## 🛠️ Tech Stack  
+
+- [Dash](https://dash.plotly.com/) (Frontend + Backend)  
+- [Dash Bootstrap Components](https://dash-bootstrap-components.opensource.faculty.ai/) (Styling)  
+- [Pandas](https://pandas.pydata.org/) & [PyArrow](https://arrow.apache.org/) (Data processing)  
+- [Plotly](https://plotly.com/python/) (Charts)  
+- [GitHub Actions](https://docs.github.com/en/actions) (CI/CD workflows)  
+
+---
