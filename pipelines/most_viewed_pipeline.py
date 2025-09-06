@@ -46,8 +46,9 @@ def processing_most_viewd_articles(article):
     result["subsection"] = article["subsection"]
     if article["media"] == []:
         result["image"] = None
-    else:    
-        result["image"] = article["media"][0]["media-metadata"][1]["url"]
+    else: 
+        max_quality = len(article['media'][0]["media-metadata"]) - 1   
+        result["image"] = article["media"][0]["media-metadata"][max_quality]["url"]
 
     return result
 

@@ -20,7 +20,7 @@ def create_navbar():
                                     style={
                                         'fontWeight': '600',
                                         'color': '#2D3748',
-                                        'fontSize': '20px'
+                                        'fontSize': '1.25rem'
                                     }
                                 ),
                                 html.Span(
@@ -29,7 +29,7 @@ def create_navbar():
                                     style={
                                         'fontWeight': '350',
                                         'color': "#718096",
-                                        'fontSize': '14px',
+                                        'fontSize': '0.875rem',
                                         'whiteSpace': 'nowrap',
                                         'marginLeft': '14px',
                                         'marginTop':'4px'
@@ -56,6 +56,7 @@ def create_navbar():
                             className="nav-link-custom me-3", # Added margin to the right
                             style={
                                 'color': '#2D3748',
+                                'fontSize': '1rem',
                                 'fontWeight': '420',
                                 'padding': '8px 16px',
                                 'borderRadius': '6px',
@@ -71,6 +72,7 @@ def create_navbar():
                             className="nav-link-custom me-3", # Added margin to the right
                             style={
                                 'color': '#2D3748',
+                                'fontSize': '1rem',
                                 'fontWeight': '420',
                                 'padding': '8px 16px',
                                 'borderRadius': '6px',
@@ -86,6 +88,7 @@ def create_navbar():
                             className="nav-link-custom",
                             style={
                                 'color': '#2D3748',
+                                'fontSize': '1rem',
                                 'fontWeight': '420',
                                 'padding': '8px 16px',
                                 'borderRadius': '6px',
