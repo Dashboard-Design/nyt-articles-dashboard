@@ -54,7 +54,7 @@ else:
 print(end_year, end_month)            
 
 
-output_path = f"{Path(__file__).parent.parent}/datasets/df_2024_2026.parquet"
+output_path = f"{Path(__file__).parent.parent}/light dataset/df_2021_2026.parquet"
 
 nyt_articles = []
 
@@ -77,11 +77,24 @@ if datetime.now().day == 1:
             nyt_articles.append(processing_articles(article))
             
         print(f"✅ Fetched {end_year}-{end_month:02d}. Sleeping for 5 seconds.")
-        
 
-        df = pd.concat( [pd.read_parquet(output_path) , pd.DataFrame(nyt_articles)], ignore_index=True)
+        df = pd.DataFrame(nyt_articles)
 
-        df['published_date'] = pd.to_datetime(df['published_date'], errors='coerce')
+        # Columns to combine for search
+        search_columns = ['keyword_one', 'keyword_two', 'keyword_three', 'keyword_four', 'headline', 'abstract',  'news_desk',  'section_name', 'subsection_name']
+
+        # Combine all parts with space separator for each row
+        df['search_text'] = df[search_columns].fillna('').astype(str).apply(lambda x: ' '.join(x), axis=1)
+
+        # Clean up extra spaces
+        df['search_text'] = df['search_text'].str.replace(r'\s+', ' ', regex=True).str.strip().str.lower()
+
+        # Drop the original columns that were used to create search_text
+        df.drop(columns=search_columns, inplace=True)
+
+        df_all = pd.concat( [pd.read_parquet(output_path) , df], ignore_index=True)
+
+        df_all['published_date'] = pd.to_datetime(df['published_date'], errors='coerce')
 
 
     except requests.exceptions.SSLError as e:
