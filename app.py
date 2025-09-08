@@ -114,7 +114,7 @@ def update_trend_analysis(n_clicks, keyword):
             template="plotly_white",
             height=500
         )
-        return query, fig, "0", "No Results", "No Data", "0"
+        return f"No Article Found for '{keyword}'", fig, "0", "No Results", "No Data", "0"
     
     monthly_counts = filtered_df.groupby('year_month').size().reset_index(name='count')
     monthly_counts['date'] = monthly_counts['year_month'].dt.to_timestamp()
