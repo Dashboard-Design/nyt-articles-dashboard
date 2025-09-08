@@ -25,33 +25,33 @@ app = dash.Dash(__name__, external_stylesheets=[
 ])
 
 # App Layout
-app.layout = html.Div(
-    style={'backgroundColor': '#F7FAFC', 'minHeight': '100vh'},
+app.layout = dbc.Container(
+    fluid=True,  #  fluid container
+    style={'backgroundColor': '#F7FAFC', 'minHeight': '100vh', 'padding': '0 0',},
     children=[
-        dcc.Location(id="url", refresh=False),  # 👈 track the URL hash
+        dcc.Location(id="url", refresh=False),  # track the URL hash
         create_navbar(),
+        # Main Content
+        dbc.Container([
+            dbc.Row([
+                dbc.Col([
+                    html.Div(style={'height': '3vh'}),
 
-        html.Div([
-            html.Div([
-                html.Div(style={'height': '40px'}),
+                    html.Div(id="analysis", children=[create_search_section()]),
 
-                html.Div(id="analysis", children=[
-                    create_search_section()
-                ]),
-                
-                html.Div(style={'height': '30px'}),
-                create_trend_chart_section(),
+                    html.Div(style={'height': '2vh'}),
+                    create_trend_chart_section(),
 
-                html.Div(style={'height': '40px'}),
+                    html.Div(style={'height': '4vh'}),
 
-                html.Div(id="most-viewed-section", children=[
-                    create_most_viewed_carousel(df_most_viewed_l30)
-                ]),
+                    html.Div(id="most-viewed-section", children=[create_most_viewed_carousel(df_most_viewed_l30)]),
 
-                html.Div(style={'height': '30px'})
+                    html.Div(style={'height': '3vh'}),
+                ], width=12)  # full width on all screens
             ])
-        ], style={"maxWidth": "1300px", "margin": "0 auto"}),
+        ], fluid=True, style={"maxWidth": "1300px", "margin": "0 auto"}),
 
+        # Footer
         html.Div(id="footer-section", children=[create_footer()])
     ]
 )
@@ -82,7 +82,7 @@ def update_trend_analysis(n_clicks, keyword):
         
         # Growth
         growth_pct = round(((last_two_years - previous_two_years) / previous_two_years) * 100, 1)
-        growth_text = f"{'▲' if growth_pct > 0 else '▼'}{abs(growth_pct):.1f}%"
+        growth_text = f"{'▲ ' if growth_pct > 0 else '▼ '}{abs(growth_pct):.1f}%"
         
         # Average
         months_span = monthly_trends_all['year_month'].nunique()
@@ -98,13 +98,13 @@ def update_trend_analysis(n_clicks, keyword):
         phrase = query.strip('"')  
         mask = df['search_text'].str.contains(phrase, na=False)
         query = query.replace('"', '')
-        query = f"Article Publication Trends for exact term '{query}'"
+        query = f"Article Publication Trends for exact term '{keyword}'"
     # Case 2: Multi-word AND search    
     else:
         words = query.split()
         mask = df['search_text'].apply(  lambda text: all(word in text for word in words) )
         query = query.replace('"', '')
-        query = f"Article Publication Trends for '{query}'"
+        query = f"Article Publication Trends for '{keyword}'"
     
     filtered_df = df[mask].copy()
     
@@ -131,8 +131,8 @@ def update_trend_analysis(n_clicks, keyword):
     
     # Growth 
     growth_pct = round(((last_two_years - previous_two_years) / previous_two_years) * 100, 1)
-    growth_text = f"{growth_pct:+.1f}%"
-    
+    growth_text = f"{'▲ ' if growth_pct > 0 else '▼ '}{abs(growth_pct):.1f}%"
+
     # Average 
     months_span = monthly_counts['year_month'].nunique()
     avg_monthly = round(total_articles / months_span, 1)

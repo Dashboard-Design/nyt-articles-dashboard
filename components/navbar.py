@@ -109,6 +109,7 @@ def create_navbar():
         sticky="top",
         className="shadow-sm",
         style={
+            'width': '100%',
             'height': '60px',
             'fontFamily': "'Inter', 'Segoe UI', sans-serif"
         }
