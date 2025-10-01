@@ -96,6 +96,7 @@ if datetime.now().day == 1:
 
         df_all['published_date'] = pd.to_datetime(df['published_date'], errors='coerce')
 
+        df_all.to_parquet(output_path, index=False)
 
     except requests.exceptions.SSLError as e:
         print(f"🔒 SSL Error on {end_year}-{end_month:02d}. Retrying after 30 seconds.")
@@ -104,8 +105,6 @@ if datetime.now().day == 1:
     except requests.exceptions.RequestException as e:
         print(f"❌ Request failed: {e}")
         time.sleep(30)
-    
-    df.to_parquet(output_path, index=False)
 
     nyt_articles.clear()   
 
